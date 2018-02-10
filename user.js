@@ -4,7 +4,7 @@ const SignUp = require("./handlers/user/signUpHandler.js");
 const SignIn = require("./handlers/user/signInHandler.js");
 const SignOut = require("./handlers/user/signOutHandler.js");
 const Verify = require("./handlers/user/verifyHandler.js");
-const ResendSMS = require("./handlers/user/resendSMSHandler.js");
+const ResendVerify = require("./handlers/user/resendVerifyHandler.js");
 const ForgotPassword = require("./handlers/user/forgotPasswordHandler.js");
 const ResetPassword = require("./handlers/user/resetPasswordHandler.js");
 
@@ -47,8 +47,8 @@ module.exports.verify = (event, context) => {
   });
 };
 
-module.exports.resendSMS = (event, context) => {
-  ResendSMS(event, (error, result) => {
+module.exports.resendVerify = (event, context) => {
+  ResendVerify(event, (error, result) => {
     const response = makeResponse(error, result);
     context.succeed(response);
   });

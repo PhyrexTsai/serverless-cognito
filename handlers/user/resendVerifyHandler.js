@@ -19,7 +19,7 @@ var poolData = {
 };
 var userPool = new AWS.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
 
-function resendSMS(entity, callback) {
+function resendVerify(entity, callback) {
   var userData = {
     "Username" : entity.username,
     "Pool" : userPool
@@ -52,7 +52,7 @@ function parseEvent(event, callback) {
 }
 
 module.exports = (event, callback) => {
-  console.log("user.resendSMS");
+  console.log("user.resendVerify");
   let entity = parseEvent(event, callback);
-  resendSMS(entity, callback);
+  resendVerify(entity, callback);
 };

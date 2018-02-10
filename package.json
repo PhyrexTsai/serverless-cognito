@@ -1,5 +1,5 @@
 {
-  "name": "serverless-cognito",
+  "name": "ens-bid-users",
   "version": "1.0.0",
   "description": "serverless cognito",
   "author": "Phyrex Tsai",
@@ -11,6 +11,6 @@
     "js-sha3": "^0.5.7"
   },
   "devDependencies": {
-    "serverless-offline": "^3.14.1"
+    "serverless-offline": "^3.16.0"
   }
 }

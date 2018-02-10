@@ -1,6 +1,7 @@
 "use strict";
 
 var errorCode = require("../../constants/errorCode.js");
+
 var AWS = require("aws-sdk");
 // WARNING: Normal amazon-cognito-identity-js should bind webpack, so I choose this library
 var CognitoSDK = require("amazon-cognito-identity-js-node");
@@ -19,16 +20,24 @@ var poolData = {
 };
 var userPool = new AWS.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
 
+function createUser(entity, callback) {
+  let response = {
+    "username": cognitoUser.username,
+    "isSuccess": true
+  };
+  callback(null, response);
+}
+
 function signUp(entity, callback) {
   var attributeList = [];
   // WARNING: entity should pass by constructor, not origin way
   var attributeName = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute("name", entity.username);
   var attributeEmail = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute("email", entity.email);
-  var attributePhoneNumber = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute("phone_number", entity.phone_number);
+  //var attributePhoneNumber = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute("phone_number", entity.phone_number);
 
   attributeList.push(attributeName);
   attributeList.push(attributeEmail);
-  attributeList.push(attributePhoneNumber);
+  //attributeList.push(attributePhoneNumber);
 
   userPool.signUp(entity.username, entity.password, attributeList, null, function(err, result){
     if (err) {
@@ -36,11 +45,7 @@ function signUp(entity, callback) {
       callback(errorCode.BAD_REQUEST, err);
     } else {
       var cognitoUser = result.user;
-      let response = {
-        "username": cognitoUser.username,
-        "isSuccess": true
-      };
-      callback(null, response);
+      createUser(entity, callback);
     }
   });
 }
@@ -53,8 +58,7 @@ function parseEvent(event, callback) {
   let entity = {
     "username": body.username,
     "password": body.password,
-    "email": body.email,
-    "phone_number": body.phone_number
+    "email": body.email
   };
   return entity;
 }

@@ -34,7 +34,9 @@ function signIn(entity, callback) {
   cognitoUser.authenticateUser(authenticationDetails, {
     onSuccess: function (result) {
       let response = {
-        "accessToken": result.getAccessToken().getJwtToken()
+        "idTokne": result.getIdToken().getJwtToken(),
+        "accessToken": result.getAccessToken().getJwtToken(),
+        "refreshToken": result.getRefreshToken().getJwtToken()
       };
       callback(null, response);
     },

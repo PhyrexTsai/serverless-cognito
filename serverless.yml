@@ -11,11 +11,12 @@
 #
 # Happy Coding!
 
-service: serverless-cognito # NOTE: update this with your service name
+service: ens-bid-users # NOTE: update this with your service name
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
 # frameworkVersion: "=X.X.X"
+frameworkVersion: ">=1.10.0 <2.0.0"
 
 plugins:
   - serverless-offline
@@ -26,7 +27,7 @@ provider:
 
 # you can overwrite defaults here
   stage: dev
-  region: ap-southeast-1
+  region: us-east-1
 
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
@@ -56,6 +57,11 @@ provider:
 #  exclude:
 #    - exclude-me.js
 #    - exclude-me-dir/**
+package:
+  excludeDevDependencies: true
+  exclude:
+    - package-lock.json
+    - .misc/**
 
 functions:
   health:
@@ -72,8 +78,6 @@ functions:
           path: /v1/user/signUp
           method: post
           cors: true
-          authorizer:
-            arn: ${env.COGNITO_ARN}
     environment:
       COGNITO_REGION: ${env:COGNITO_REGION}
       COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID}
@@ -85,8 +89,6 @@ functions:
           path: /v1/user/signIn
           method: post
           cors: true
-          authorizer:
-            arn: ${env.COGNITO_ARN}
     environment:
       COGNITO_REGION: ${env:COGNITO_REGION}
       COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID}
@@ -99,7 +101,8 @@ functions:
           method: post
           cors: true
           authorizer:
-            arn: ${env.COGNITO_ARN}
+            name: authorizer
+            arn: arn:aws:cognito-idp:us-east-1:521301825182:userpool/us-east-1_kPBcopDNW
     environment:
       COGNITO_REGION: ${env:COGNITO_REGION}
       COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID}
@@ -111,21 +114,17 @@ functions:
           path: /v1/user/verify
           method: post
           cors: true
-          authorizer:
-            arn: ${env.COGNITO_ARN}
     environment:
       COGNITO_REGION: ${env:COGNITO_REGION}
       COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID}
       COGNITO_CLINET_ID: ${env:COGNITO_CLINET_ID}
-  resendSMS:
-    handler: user.resendSMS
+  resendVerify:
+    handler: user.resendVerify
     events:
       - http:
-          path: /v1/user/resendSMS
+          path: /v1/user/resendVerify
           method: post
           cors: true
-          authorizer:
-            arn: ${env.COGNITO_ARN}
     environment:
       COGNITO_REGION: ${env:COGNITO_REGION}
       COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID}
@@ -138,7 +137,8 @@ functions:
           method: post
           cors: true
           authorizer:
-            arn: ${env.COGNITO_ARN}
+            name: authorizer
+            arn: arn:aws:cognito-idp:us-east-1:521301825182:userpool/us-east-1_kPBcopDNW
     environment:
       COGNITO_REGION: ${env:COGNITO_REGION}
       COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID}
@@ -151,7 +151,8 @@ functions:
           method: post
           cors: true
           authorizer:
-            arn: ${env.COGNITO_ARN}
+            name: authorizer
+            arn: arn:aws:cognito-idp:us-east-1:521301825182:userpool/us-east-1_kPBcopDNW
     environment:
       COGNITO_REGION: ${env:COGNITO_REGION}
       COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID}
